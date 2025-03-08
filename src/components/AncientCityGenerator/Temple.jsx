@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import seedrandom from 'seedrandom';
 import * as THREE from 'three';
 
 // Export temple styles as constants
@@ -12,7 +13,7 @@ const Temple = ({ position, size = 1.0, seed = 12345, style = TEMPLE_STYLES.SIMP
   // Use memoization to ensure stable temple dimensions
   const templeDimensions = useMemo(() => {
     // Get a seeded random generator for temple properties
-    const random = new Math.seedrandom(seed.toString());
+    const random = seedrandom(seed.toString());
     
     // Derive temple dimensions based on seed
     return {
@@ -44,7 +45,7 @@ const Temple = ({ position, size = 1.0, seed = 12345, style = TEMPLE_STYLES.SIMP
   if (style === TEMPLE_STYLES.GROOVED) {
     // Calculate groove parameters
     const grooveParams = useMemo(() => {
-      const random = new Math.seedrandom((seed + 1).toString());
+      const random = seedrandom((seed + 1).toString());
       
       // Groove dimensions - exactly twice as wide as deep
       const grooveDepth = Math.min(templeDimensions.width, templeDimensions.depth) * 0.08;

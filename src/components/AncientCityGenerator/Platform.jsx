@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { createNoise2D } from 'simplex-noise';
 import alea from 'alea';
 import Temple from './Temple';
+import seedrandom from 'seedrandom';
 
 // Platform style constants - removed TERRACED
 export const PLATFORM_STYLES = {
@@ -211,7 +212,7 @@ const Platform = ({
     if (platformStyle !== PLATFORM_STYLES.STEPPED) return null;
     
     // Create a seeded random generator based on platformSeed
-    const random = new Math.seedrandom(platformSeed.toString());
+    const random = seedrandom(platformSeed.toString());
     
     // Define the number of steps and their dimensions
     const stepCount = 3 + Math.floor(random() * 2); // 3-4 steps
