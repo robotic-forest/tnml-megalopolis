@@ -1,12 +1,11 @@
-import { Route, Switch, Link } from "wouter";
+import { Route, Switch } from "wouter"
+import AncientCitySimulation from "./components/AncientCityGenerator/AncientCityGenerator";
 
 function Mainframe() {
   return (
     <Switch>
       <Route path="/" exact>
-        <div className="text-red-500">
-          Hello World
-        </div>
+        <AncientCitySimulation />
       </Route>
     </Switch>
   )
