@@ -2,10 +2,8 @@ import React, { useMemo } from 'react';
 import Platform from './platform/Platform.jsx';
 import Courtyard from './components/Courtyard';
 import Room from './components/Room';
-import Pathway from './components/Pathway';
 import SimpleHouse from './components/SimpleHouse';
 import CourtyardHelpers from './components/CourtyardHelpers';
-import PathHelpers from './components/PathHelpers';
 
 // Import the generateCityLayout function
 import { generateCityLayout } from './utils/cityGeneration';
@@ -125,23 +123,7 @@ const ProceduralCityGenerator = ({
         />
       ))}
       
-      {/* Pathways with helpers */}
-      {cityLayout.pathways.map((path, index) => (
-        <React.Fragment key={`path-${index}`}>
-          <Pathway 
-            points={path.points} 
-            width={path.width}
-            wireframe={wireframe}
-            receiveShadow={enableShadows}
-          />
-          
-          {/* Add path helpers when showHelpers is true */}
-          <PathHelpers 
-            path={path}
-            visible={showHelpers}
-          />
-        </React.Fragment>
-      ))}
+      {/* REMOVED: Pathways and path helpers */}
     </group>
   );
 };

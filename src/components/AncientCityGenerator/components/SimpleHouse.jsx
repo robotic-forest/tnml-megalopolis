@@ -1,13 +1,20 @@
 import React from 'react';
 
 /**
- * Simplified house component with debug indicators
+ * Simplified house component with improved platform collision detection
  */
 const SimpleHouse = ({ 
   position, width, length, height, rotation = 0, age = 1.0, type,
   wireframe = false, castShadow = true, receiveShadow = true
 }) => {
-  // Color based on age and house type
+  // For debugging - log houses being placed near center 
+  React.useEffect(() => {
+    if (Math.abs(position.x) < 15 && Math.abs(position.z) < 15) {
+      console.log(`House near center at (${position.x.toFixed(2)}, ${position.z.toFixed(2)}), type: ${type}`);
+    }
+  }, []);
+  
+  // Color based on age and house type for easier visual debugging
   let baseColor = "#c0a080";
   
   // Different colors by type for easier visual debugging
@@ -19,8 +26,8 @@ const SimpleHouse = ({
     baseColor = "#b09975"; // Medium brown for middle ring
   } else if (type === 'small') {
     baseColor = "#97805d"; // Darker brown for outer ring
-  } else if (type === 'isolated') {
-    baseColor = "#7a6e54"; // Gray-brown for isolated houses
+  } else if (type === 'tiny') {
+    baseColor = "#7a6e54"; // Darkest brown for tiny houses
   }
 
   return (
@@ -38,7 +45,7 @@ const SimpleHouse = ({
         />
       </mesh>
       
-      {/* Debug line showing house position and width/length */}
+      {/* Debug shape for guaranteed houses */}
       {type === 'guaranteed' && (
         <group>
           <lineSegments>

@@ -196,92 +196,26 @@ function generateRooms(random, noise2D, courtyards, complexity, heightVariation)
 }
 
 /**
- * Generates pathways between structures
+ * Generates small houses around courtyards, preventing overlap with the central platform
  */
-function generatePathways(random, rooms, courtyards, complexity) {
-  const pathways = [];
-
-  // Connect rooms to nearby courtyards
-  rooms.forEach((room, roomIndex) => {
-    if (!room.connected) return; // Skip if no connection data
-    
-    room.connected.forEach(connection => {
-      if (connection.type === 'courtyard') {
-        const roomCentroid = calculateCentroid(room.vertices);
-        const courtyardCentroid = calculateCentroid(courtyards[connection.index].vertices);
-        
-        pathways.push({
-          points: [
-            { x: roomCentroid.x, z: roomCentroid.y },
-            { x: courtyardCentroid.x, z: courtyardCentroid.y }
-          ],
-          width: 0.8 + random() * 0.4
-        });
-      }
-      else if (connection.type === 'room') {
-        const roomCentroid = calculateCentroid(room.vertices);
-        const targetRoomCentroid = calculateCentroid(rooms[connection.index].vertices);
-        
-        pathways.push({
-          points: [
-            { x: roomCentroid.x, z: roomCentroid.y },
-            { x: targetRoomCentroid.x, z: targetRoomCentroid.y }
-          ],
-          width: 0.8 + random() * 0.4
-        });
-      }
-    });
-  });
-  
-  // Connect some rooms to each other
-  const extraConnections = Math.floor(rooms.length * complexity * 0.3);
-  for (let i = 0; i < extraConnections; i++) {
-    const roomA = Math.floor(random() * rooms.length);
-    const roomB = Math.floor(random() * rooms.length);
-    
-    if (roomA !== roomB) {
-      const centroidA = calculateCentroid(rooms[roomA].vertices);
-      const centroidB = calculateCentroid(rooms[roomB].vertices);
-      
-      // Only connect rooms that are reasonably close to each other
-      const distance = Math.sqrt(
-        Math.pow(centroidA.x - centroidB.x, 2) + 
-        Math.pow(centroidA.y - centroidB.y, 2)
-      );
-      
-      if (distance < 10) {
-        pathways.push({
-          points: [
-            { x: centroidA.x, z: centroidA.y },
-            { x: centroidB.x, z: centroidB.y }
-          ],
-          width: 0.6 + random() * 0.3
-        });
-        
-        // Update connection information if it exists
-        if (!rooms[roomA].connected) rooms[roomA].connected = [];
-        if (!rooms[roomB].connected) rooms[roomB].connected = [];
-        
-        rooms[roomA].connected.push({ type: 'room', index: roomB });
-        rooms[roomB].connected.push({ type: 'room', index: roomA });
-      }
-    }
-  }
-  
-  return pathways;
-}
-
-/**
- * Generates small houses around courtyards with smooth tapering
- */
-function generateCourtyardHouses(random, noise2D, courtyards, rooms, heightVariation) {
+function generateCourtyardHouses(random, noise2D, courtyards, rooms, centralPlatform, heightVariation) {
   const smallHouses = [];
   
-  // Simple collision detection for house placement
+  // Calculate platform radius for collision detection
+  const platformRadius = Math.max(centralPlatform.width / 2, centralPlatform.depth / 2);
+  
+  // Improved collision detection for house placement
   const isOverlapping = (x, z, width, length) => {
     const padding = 0.3;
     const halfWidth = (width / 2) + padding;
     const halfLength = (length / 2) + padding;
+    
+    // Check overlap with central platform
+    const distanceToCenter = Math.sqrt(x*x + z*z);
+    // Add padding to platform radius to prevent houses being too close
+    if (distanceToCenter < platformRadius + Math.max(halfWidth, halfLength) + 1.0) {
+      return true;
+    }
     
     // Check corners of the potential house
     const corners = [
@@ -527,22 +461,18 @@ export function generateCityLayout(params) {
     random, noise2D, courtyards, complexity, heightVariation
   );
   
-  // Generate pathways between structures
-  const pathways = generatePathways(
-    random, rooms, courtyards, complexity
-  );
+  // REMOVED: Generate pathways between structures
   
-  // Generate small houses around courtyards
+  // Generate small houses around courtyards - now passing centralPlatform
   const courtyardHouses = generateCourtyardHouses(
-    random, noise2D, courtyards, rooms, heightVariation
+    random, noise2D, courtyards, rooms, centralPlatform, heightVariation
   );
   
-  // Return city layout with courtyard houses as scattered houses for compatibility
+  // Return city layout without pathways
   return {
     centralPlatform,
     courtyards,
     rooms,
-    pathways,
-    scatteredHouses: courtyardHouses // Use courtyard houses as scattered houses
+    scatteredHouses: courtyardHouses
   };
 }

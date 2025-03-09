@@ -6,7 +6,7 @@ import React from 'react';
 const DebugLegend = ({ visible = false }) => {
   if (!visible) return null;
 
-  // Helper color codes and their meanings
+  // Helper color codes and their meanings (removed path connections)
   const legendItems = [
     { color: '#ff0000', label: 'Courtyard Center' },
     { color: '#ff9900', label: 'Courtyard Boundary' },
@@ -14,7 +14,6 @@ const DebugLegend = ({ visible = false }) => {
     { color: '#0088ff', label: 'Inner Houses Ring' },
     { color: '#5500ff', label: 'Middle Houses Ring' },
     { color: '#aa00ff', label: 'Outer Houses Ring' },
-    { color: '#ffff00', label: 'Path Connections' },
     { color: '#ffffff', label: 'Guaranteed House Boundary' }
   ];
 
