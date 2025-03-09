@@ -116,7 +116,7 @@ function generateCourtyards(random, noise2D, centralPlatform, courtyardCount, co
 /**
  * Generates rooms around courtyards
  */
-function generateRooms(random, noise2D, courtyards, complexity, heightVariation) {
+function generateRooms(random, noise2D, courtyards, complexity, heightVariation, roomSpread = 1.0) {
   const rooms = [];
   
   // Remove these redundant constant declarations since they're now imported
@@ -132,7 +132,8 @@ function generateRooms(random, noise2D, courtyards, complexity, heightVariation)
     for (let i = 0; i < roomCount; i++) {
       // Position rooms surrounding the courtyard
       const angle = (i / roomCount) * Math.PI * 2;
-      const distance = courtyard.radius + 1 + random() * 2;
+      // Apply roomSpread to increase distance from courtyard
+      const distance = (courtyard.radius + 1 + random() * 2) * roomSpread;
       
       const roomX = courtyardCentroid.x + Math.cos(angle) * distance;
       const roomZ = courtyardCentroid.y + Math.sin(angle) * distance;
@@ -164,7 +165,8 @@ function generateRooms(random, noise2D, courtyards, complexity, heightVariation)
     
     // Position the new room adjacent to an existing one
     const angle = random() * Math.PI * 2;
-    const distance = calculateMaxRadius(parentRoom.vertices, parentCentroid) + 0.5 + random() * 1.5;
+    // Apply roomSpread to increase distance between rooms
+    const distance = (calculateMaxRadius(parentRoom.vertices, parentCentroid) + 0.5 + random() * 1.5) * roomSpread;
     
     const roomX = parentCentroid.x + Math.cos(angle) * distance;
     const roomZ = parentCentroid.y + Math.sin(angle) * distance;
@@ -437,7 +439,7 @@ export function generateCityLayout(params) {
   const { 
     seed, complexity, heightVariation, courtyardCount,
     courtyardSize, courtyardSpacing, platformSeed,
-    platformSize
+    platformSize, roomSpread = 1.0
   } = params;
   
   // Initialize random number generators
@@ -458,9 +460,9 @@ export function generateCityLayout(params) {
     random, noise2D, centralPlatform, courtyardCount, courtyardSize, courtyardSpacing
   );
   
-  // Generate rooms around courtyards
+  // Generate rooms around courtyards - now with roomSpread parameter
   const rooms = generateRooms(
-    random, noise2D, courtyards, complexity, heightVariation
+    random, noise2D, courtyards, complexity, heightVariation, roomSpread
   );
   
   // REMOVED: Generate pathways between structures

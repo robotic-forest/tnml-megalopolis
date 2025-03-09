@@ -40,7 +40,8 @@ const ProceduralCityGenerator = ({
       courtyardSpacing,
       platformSeed,
       platformSize,
-      platformStyle
+      platformStyle,
+      roomSpread: 1.2
     };
     
     // Call the centralized city generation function
