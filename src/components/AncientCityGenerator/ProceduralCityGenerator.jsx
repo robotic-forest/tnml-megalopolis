@@ -77,21 +77,19 @@ const ProceduralCityGenerator = ({
       />
       
       {/* Courtyards */}
-      {cityLayout.courtyards.map((courtyard, index) => (
+      {/* {cityLayout.courtyards.map((courtyard, index) => (
         <React.Fragment key={`courtyard-${index}`}>
           <Courtyard 
             vertices={courtyard.vertices} 
             wireframe={wireframe}
             receiveShadow={enableShadows}
           />
-          
-          {/* Add courtyard helpers when showHelpers is true */}
           <CourtyardHelpers 
             courtyard={courtyard}
             visible={showHelpers}
           />
         </React.Fragment>
-      ))}
+      ))} */}
       
       {/* Rooms */}
       {cityLayout.rooms.map((room, index) => (
