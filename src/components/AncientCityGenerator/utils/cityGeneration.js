@@ -74,8 +74,10 @@ function generateCourtyards(random, noise2D, centralPlatform, courtyardCount, co
         const dz = existingCourtyard.position.z - z;
         const distance = Math.sqrt(dx * dx + dz * dz);
         
-        // Include spacing factor in minimum distance calculation
-        const minDistance = (existingCourtyard.radius + size) * courtyardSpacing;
+        // Include additional spacing factor to increase distance between courtyards
+        // Using a multiplier of 2.0 to ensure courtyards are much further apart
+        const spacingMultiplier = 2.0;
+        const minDistance = (existingCourtyard.radius + size) * courtyardSpacing * spacingMultiplier;
         
         if (distance < minDistance) {
           validPlacement = false;
