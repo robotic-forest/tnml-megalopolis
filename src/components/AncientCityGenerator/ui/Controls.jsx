@@ -18,7 +18,13 @@ export const Controls = ({
   toggleVisibility,
   templeStyle, setTempleStyle,
   templeSize, setTempleSize,
-  platformStyle, setPlatformStyle // New platform style props
+  platformStyle, setPlatformStyle, // New platform style props
+  groundTileScale, setGroundTileScale,
+  groundMacroScale, setGroundMacroScale,
+  useVoronoi, setUseVoronoi,
+  terrainFeatures, setTerrainFeatures,
+  featureScale, setFeatureScale,
+  featureIntensity, setFeatureIntensity
 }) => {
   const randomizeSeed = () => {
     setSeed(Math.floor(Math.random() * SETTINGS_DEFAULTS.seed.max));
@@ -347,6 +353,113 @@ export const Controls = ({
               style={{ marginLeft: '0.5rem', width: '120px' }}
             />
             {templeSize.toFixed(1)}x
+          </label>
+        </div>
+      </div>
+
+      {/* Ground settings panel */}
+      <div style={{ 
+        marginBottom: '1rem', 
+        padding: '0.5rem',
+        background: '#d0c0a0',
+        border: '1px inset #c0b090',
+        borderRadius: '0' 
+      }}>
+        <h4 style={{ margin: '0 0 0.5rem 0' }}>Ground Settings</h4>
+        
+        {/* Ground texture tiling */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label>
+            Texture Tiling:
+            <input
+              type="range"
+              min="1"
+              max="6"
+              step="0.5"
+              value={groundTileScale}
+              onChange={(e) => setGroundTileScale(parseFloat(e.target.value))}
+              style={{ marginLeft: '0.5rem', width: '120px' }}
+            />
+            {groundTileScale}
+          </label>
+        </div>
+        
+        {/* Macro scale for global patterns */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label>
+            Macro Pattern Scale:
+            <input
+              type="range"
+              min="0.01"
+              max="0.2"
+              step="0.01"
+              value={groundMacroScale}
+              onChange={(e) => setGroundMacroScale(parseFloat(e.target.value))}
+              style={{ marginLeft: '0.5rem', width: '120px' }}
+            />
+            {groundMacroScale}
+          </label>
+        </div>
+        
+        {/* Toggle for Voronoi patterns */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center' }}>
+            Use Voronoi Patterns:
+            <input
+              type="checkbox"
+              checked={useVoronoi}
+              onChange={(e) => setUseVoronoi(e.target.checked)}
+              style={{ marginLeft: '0.5rem' }}
+            />
+          </label>
+        </div>
+        
+        {/* Toggle for terrain features */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center' }}>
+            Show Terrain Features:
+            <input
+              type="checkbox"
+              checked={terrainFeatures}
+              onChange={(e) => setTerrainFeatures(e.target.checked)}
+              style={{ marginLeft: '0.5rem' }}
+            />
+          </label>
+        </div>
+        
+        {/* Feature scale */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label>
+            Feature Scale:
+            <input
+              type="range"
+              min="0.5"
+              max="2.0"
+              step="0.1"
+              value={featureScale}
+              onChange={(e) => setFeatureScale(parseFloat(e.target.value))}
+              disabled={!terrainFeatures}
+              style={{ marginLeft: '0.5rem', width: '120px' }}
+            />
+            {featureScale}
+          </label>
+        </div>
+        
+        {/* Feature intensity */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label>
+            Feature Intensity:
+            <input
+              type="range"
+              min="0.2"
+              max="1.0"
+              step="0.1"
+              value={featureIntensity}
+              onChange={(e) => setFeatureIntensity(parseFloat(e.target.value))}
+              disabled={!terrainFeatures}
+              style={{ marginLeft: '0.5rem', width: '120px' }}
+            />
+            {featureIntensity}
           </label>
         </div>
       </div>

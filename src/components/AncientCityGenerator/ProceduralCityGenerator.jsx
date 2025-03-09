@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Platform from './platform/Platform.jsx';
 import Courtyard from './components/Courtyard';
 import Room from './components/Room';
 import SimpleHouse from './components/SimpleHouse';
 import CourtyardHelpers from './components/CourtyardHelpers';
+// Import the procedural ground component
+import ProceduralGround from './ground/ProceduralGround';
 
 // Import the generateCityLayout function
 import { generateCityLayout } from './utils/cityGeneration';
@@ -26,8 +28,32 @@ const ProceduralCityGenerator = ({
   templeStyle = 'Simple Temple', 
   templeSize = 1.0,
   showHelpers = false, // Added prop for debug helpers
+  roomSpread = 1.2,    // Room spread parameter
+  // Ground texture parameters
+  groundSeed,          // Optional separate seed for ground texture
+  groundColor1 = '#e4d5b7',
+  groundColor2 = '#d1bc91',
+  groundColor3 = '#c9b188',
+  groundDustColor = '#e8dcbf',
+  groundStoniness = 0.3,
+  groundDustiness = 0.6,
+  groundTextureScale = 1,
+  // New props for subtle sand
+  groundSubtleness = 0.7,
+  rippleIntensity = 0.3,
+  // New ground tile reduction props
+  groundTileScale = 3,
+  groundMacroScale = 0.05,
+  useVoronoi = true,
+  // New terrain feature controls
+  terrainFeatures = true,
+  featureScale = 1.0,
+  featureIntensity = 0.6,
   onGenerated = () => {}
 }) => {
+  // Track if this is the initial render to prevent unnecessary texture regeneration
+  const [isInitialRender, setIsInitialRender] = useState(true);
+  
   // Generate the city layout using the centralized function
   const cityLayout = useMemo(() => {
     // Create parameter object for city generation
@@ -41,7 +67,7 @@ const ProceduralCityGenerator = ({
       platformSeed,
       platformSize,
       platformStyle,
-      roomSpread: 1.2
+      roomSpread
     };
     
     // Call the centralized city generation function
@@ -52,12 +78,73 @@ const ProceduralCityGenerator = ({
       onGenerated && onGenerated(layout);
     }, 0);
     
+    // After initial render, mark it as complete
+    if (isInitialRender) {
+      setTimeout(() => setIsInitialRender(false), 100);
+    }
+    
     return layout;
   }, [seed, complexity, heightVariation, courtyardCount, courtyardSize, 
-      courtyardSpacing, platformSeed, platformSize, platformStyle, onGenerated]);
+      courtyardSpacing, platformSeed, platformSize, platformStyle, roomSpread, onGenerated]);
+
+  // Use the main seed for ground if no specific groundSeed is provided
+  const effectiveGroundSeed = groundSeed !== undefined ? groundSeed : seed + 10000;
+
+  // Memoize ground component to prevent unnecessary re-renders
+  const groundComponent = useMemo(() => {
+    return (
+      <ProceduralGround 
+        size={300}
+        resolution={1024}
+        seed={effectiveGroundSeed}
+        textureScale={groundTextureScale}
+        groundColor1={groundColor1}
+        groundColor2={groundColor2}
+        groundColor3={groundColor3}
+        dustColor={groundDustColor}
+        stoniness={groundStoniness}
+        dustiness={groundDustiness}
+        rippleIntensity={rippleIntensity}
+        subtleness={groundSubtleness}
+        tileScale={groundTileScale}
+        macroScale={groundMacroScale}
+        useVoronoi={useVoronoi}
+        // Pass new terrain feature parameters
+        terrainFeatures={terrainFeatures}
+        featureScale={featureScale}
+        featureIntensity={featureIntensity}
+        receiveShadows={enableShadows}
+        wireframe={wireframe}
+        performanceMode={true} // Enable performance mode by default
+      />
+    );
+  }, [
+    // Only depend on ground-related properties
+    effectiveGroundSeed,
+    groundTextureScale,
+    groundColor1,
+    groundColor2, 
+    groundColor3,
+    groundDustColor,
+    groundStoniness,
+    groundDustiness,
+    rippleIntensity,
+    groundSubtleness,
+    groundTileScale,
+    groundMacroScale,
+    useVoronoi,
+    terrainFeatures,
+    featureScale,
+    featureIntensity,
+    enableShadows,
+    wireframe
+  ]);
 
   return (
     <group>
+      {/* Add the memoized ground plane */}
+      {groundComponent}
+      
       {/* Central platform with temple */}
       <Platform 
         baseVertices={cityLayout.centralPlatform.baseVertices}

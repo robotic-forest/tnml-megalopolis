@@ -101,7 +101,7 @@ export const AncientCitySimulation = () => {
             castShadow={false}
           />
           
-          <Ground wireframe={wireframe} />
+          {/* <Ground wireframe={wireframe} /> */}
           
           {/* Pass the showHelpers prop to city generator */}
           <ProceduralCityGenerator 
