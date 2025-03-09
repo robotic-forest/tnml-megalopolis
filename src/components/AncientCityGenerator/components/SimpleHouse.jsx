@@ -87,12 +87,14 @@ const SimpleHouse = ({
     return (hash % 30) < probability;
   }, [position.x, position.z, seed, type]);
   
-  // Size multiplier to make houses larger (increased for courtyard houses)
-  const sizeMultiplier = hasCourtyardType ? 2.0 : 1.25;
+  // Size multiplier to make houses larger (reduced for courtyard houses)
+  // *** THIS IS THE VARIABLE TO CHANGE TO ADJUST COURTYARD HOUSE SIZE ***
+  const courtyardSizeMultiplier = 1.4; // Reduced from 2.0 to make courtyard houses smaller
+  const sizeMultiplier = hasCourtyardType ? courtyardSizeMultiplier : 1.25;
   
   // Calculate adjusted dimensions
   const adjustedWidth = width * sizeMultiplier;
-  const adjustedHeight = height * (hasCourtyardType ? 1.5 : 1.25);
+  const adjustedHeight = height * (hasCourtyardType ? 1.4 : 1.25); // Also slightly reduced height multiplier from 1.5
   const adjustedLength = length * sizeMultiplier;
   
   // Courtyard dimensions (inner space)
