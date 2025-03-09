@@ -26,6 +26,8 @@ export const AncientCitySimulation = () => {
   const [templeStyle, setTempleStyle] = useState(TEMPLE_STYLES.SIMPLE);
   const [templeSize, setTempleSize] = useState(1.0);
   const [platformStyle, setPlatformStyle] = useState(PLATFORM_STYLES.STANDARD);
+  // Add new state for house density
+  const [houseDensity, setHouseDensity] = useState(1.0);
   
   const toggleControlsVisibility = () => {
     setControlsVisible(prev => !prev);
@@ -62,6 +64,9 @@ export const AncientCitySimulation = () => {
         setTempleSize={setTempleSize}
         platformStyle={platformStyle}
         setPlatformStyle={setPlatformStyle}
+        // Add house density props
+        houseDensity={houseDensity}
+        setHouseDensity={setHouseDensity}
       />
       
       {/* Add the debug legend component */}
@@ -105,7 +110,7 @@ export const AncientCitySimulation = () => {
           
           {/* Pass the showHelpers prop to city generator */}
           <ProceduralCityGenerator 
-            key={`city-${seed}-${complexity}-${heightVariation}-${courtyardCount}-${courtyardSize}-${courtyardSpacing}-${platformSeed}-${platformSize}-${wireframe}-${templeStyle}-${templeSize}-${platformStyle}-${showHelpers}`} 
+            key={`city-${seed}-${complexity}-${heightVariation}-${courtyardCount}-${courtyardSize}-${courtyardSpacing}-${platformSeed}-${platformSize}-${wireframe}-${templeStyle}-${templeSize}-${platformStyle}-${showHelpers}-${houseDensity}`} 
             seed={seed} 
             complexity={complexity}
             heightVariation={heightVariation}
@@ -120,6 +125,7 @@ export const AncientCitySimulation = () => {
             wireframe={wireframe}
             enableShadows={true}
             showHelpers={showHelpers} // Pass helpers state to the city generator
+            houseDensity={houseDensity} // Pass house density to the city generator
           />
           
           <Sky 

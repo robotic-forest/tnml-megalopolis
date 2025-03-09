@@ -49,6 +49,7 @@ const ProceduralCityGenerator = ({
   terrainFeatures = true,
   featureScale = 1.0,
   featureIntensity = 0.6,
+  houseDensity = 1.0, // Add houseDensity parameter with default value
   onGenerated = () => {}
 }) => {
   // Track if this is the initial render to prevent unnecessary texture regeneration
@@ -67,7 +68,8 @@ const ProceduralCityGenerator = ({
       platformSeed,
       platformSize,
       platformStyle,
-      roomSpread
+      roomSpread,
+      houseDensity // Pass houseDensity to the generation function
     };
     
     // Call the centralized city generation function
@@ -85,7 +87,7 @@ const ProceduralCityGenerator = ({
     
     return layout;
   }, [seed, complexity, heightVariation, courtyardCount, courtyardSize, 
-      courtyardSpacing, platformSeed, platformSize, platformStyle, roomSpread, onGenerated]);
+      courtyardSpacing, platformSeed, platformSize, platformStyle, roomSpread, houseDensity, onGenerated]);
 
   // Use the main seed for ground if no specific groundSeed is provided
   const effectiveGroundSeed = groundSeed !== undefined ? groundSeed : seed + 10000;

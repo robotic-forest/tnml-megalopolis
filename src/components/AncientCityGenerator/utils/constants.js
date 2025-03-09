@@ -22,7 +22,15 @@ export const SETTINGS_DEFAULTS = {
   wireframe: { default: false },
 
   // Temple settings
-  templeSize: { min: 0.5, max: 1.5, default: 1.0, step: 0.1 }
+  templeSize: { min: 0.5, max: 1.5, default: 1.0, step: 0.1 },
+
+  // House density settings
+  houseDensity: {
+    min: 0.1,
+    max: 2.0,
+    default: 1.0,
+    step: 0.1
+  }
 };
 
 // Constants for city generation

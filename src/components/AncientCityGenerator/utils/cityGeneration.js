@@ -202,7 +202,7 @@ function generateRooms(random, noise2D, courtyards, complexity, heightVariation,
 /**
  * Generates small houses around courtyards, preventing overlap with the central platform
  */
-function generateCourtyardHouses(random, noise2D, courtyards, rooms, centralPlatform, heightVariation) {
+function generateCourtyardHouses(random, noise2D, courtyards, rooms, centralPlatform, heightVariation, houseDensity = 1.0) {
   const smallHouses = [];
   
   // Calculate platform radius for collision detection
@@ -264,7 +264,9 @@ function generateCourtyardHouses(random, noise2D, courtyards, rooms, centralPlat
     // Calculate base number of houses with some randomization to add variety
     const sizeRatio = Math.min(1.5, Math.max(0.5, courtyard.radius / 5));
     const houseVariation = 0.8 + random() * 0.4; // 0.8-1.2 variation factor
-    const houseCount = Math.floor(220 * sizeRatio * houseVariation);
+    
+    // Apply house density multiplier to control number of houses
+    const houseCount = Math.floor(220 * sizeRatio * houseVariation * houseDensity);
     
     // Split houses across three rings with a more gradual distribution
     const innerRingCount = Math.ceil(houseCount * 0.45); // 45% in inner ring
@@ -439,7 +441,7 @@ export function generateCityLayout(params) {
   const { 
     seed, complexity, heightVariation, courtyardCount,
     courtyardSize, courtyardSpacing, platformSeed,
-    platformSize, roomSpread = 1.0
+    platformSize, roomSpread = 1.0, houseDensity = 1.0
   } = params;
   
   // Initialize random number generators
@@ -467,9 +469,9 @@ export function generateCityLayout(params) {
   
   // REMOVED: Generate pathways between structures
   
-  // Generate small houses around courtyards - now passing centralPlatform
+  // Generate small houses around courtyards - now passing houseDensity parameter
   const courtyardHouses = generateCourtyardHouses(
-    random, noise2D, courtyards, rooms, centralPlatform, heightVariation
+    random, noise2D, courtyards, rooms, centralPlatform, heightVariation, houseDensity
   );
   
   // Return city layout without pathways
