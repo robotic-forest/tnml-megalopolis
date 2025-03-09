@@ -1,26 +1,17 @@
 import React, { useMemo } from 'react';
-import { createNoise2D } from 'simplex-noise';
-import alea from 'alea';
-import seedrandom from 'seedrandom';
-
-// Component imports
 import Platform from './platform/Platform.jsx';
 import Courtyard from './components/Courtyard';
 import Room from './components/Room';
 import Pathway from './components/Pathway';
 import SimpleHouse from './components/SimpleHouse';
+import CourtyardHelpers from './components/CourtyardHelpers';
+import PathHelpers from './components/PathHelpers';
 
-// Import the generateCityLayout function to centralize city generation logic
+// Import the generateCityLayout function
 import { generateCityLayout } from './utils/cityGeneration';
 
-// Utility imports
-import { CITY_RADIUS } from './utils/constants';
-
-// Import platform generator
-import { generateIrregularPlatformWithTiers } from './platform/PlatformGeometry.js';
-
 /**
- * Main procedural city generator component
+ * Main procedural city generator component with added debug helpers
  */
 const ProceduralCityGenerator = ({ 
   seed = 12345, 
@@ -36,6 +27,7 @@ const ProceduralCityGenerator = ({
   enableShadows = true,
   templeStyle = 'Simple Temple', 
   templeSize = 1.0,
+  showHelpers = false, // Added prop for debug helpers
   onGenerated = () => {}
 }) => {
   // Generate the city layout using the centralized function
@@ -83,16 +75,24 @@ const ProceduralCityGenerator = ({
         templeSize={templeSize}
         castShadow={enableShadows}
         receiveShadow={enableShadows}
+        showHelpers={showHelpers}
       />
       
       {/* Courtyards */}
       {cityLayout.courtyards.map((courtyard, index) => (
-        <Courtyard 
-          key={`courtyard-${index}`} 
-          vertices={courtyard.vertices} 
-          wireframe={wireframe}
-          receiveShadow={enableShadows}
-        />
+        <React.Fragment key={`courtyard-${index}`}>
+          <Courtyard 
+            vertices={courtyard.vertices} 
+            wireframe={wireframe}
+            receiveShadow={enableShadows}
+          />
+          
+          {/* Add courtyard helpers when showHelpers is true */}
+          <CourtyardHelpers 
+            courtyard={courtyard}
+            visible={showHelpers}
+          />
+        </React.Fragment>
       ))}
       
       {/* Rooms */}
@@ -118,21 +118,29 @@ const ProceduralCityGenerator = ({
           height={house.height}
           rotation={house.rotation}
           age={house.age}
+          type={house.type} // Use type for debugging colors
           wireframe={wireframe}
           castShadow={enableShadows}
           receiveShadow={enableShadows}
         />
       ))}
       
-      {/* Pathways */}
+      {/* Pathways with helpers */}
       {cityLayout.pathways.map((path, index) => (
-        <Pathway 
-          key={`path-${index}`} 
-          points={path.points} 
-          width={path.width}
-          wireframe={wireframe}
-          receiveShadow={enableShadows}
-        />
+        <React.Fragment key={`path-${index}`}>
+          <Pathway 
+            points={path.points} 
+            width={path.width}
+            wireframe={wireframe}
+            receiveShadow={enableShadows}
+          />
+          
+          {/* Add path helpers when showHelpers is true */}
+          <PathHelpers 
+            path={path}
+            visible={showHelpers}
+          />
+        </React.Fragment>
       ))}
     </group>
   );

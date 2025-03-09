@@ -13,6 +13,7 @@ export const Controls = ({
   platformSeed, setPlatformSeed,
   platformSize, setPlatformSize,
   wireframe, setWireframe,
+  showHelpers, setShowHelpers, // New prop for debug helpers
   isVisible, // New visibility prop
   toggleVisibility,
   templeStyle, setTempleStyle,
@@ -84,7 +85,7 @@ export const Controls = ({
         borderRadius: '0'
       }}>
         <h4 style={{ margin: '0 0 0.5rem 0' }}>Display Options</h4>
-        <label style={{ display: 'flex', alignItems: 'center' }}>
+        <label style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
           <input
             type="checkbox"
             checked={wireframe}
@@ -92,6 +93,17 @@ export const Controls = ({
             style={{ marginRight: '0.5rem' }}
           />
           Wireframe Mode
+        </label>
+        
+        {/* New checkbox for debug helpers */}
+        <label style={{ display: 'flex', alignItems: 'center' }}>
+          <input
+            type="checkbox"
+            checked={showHelpers}
+            onChange={(e) => setShowHelpers(e.target.checked)}
+            style={{ marginRight: '0.5rem' }}
+          />
+          Show Helpers
         </label>
       </div>
 

@@ -177,7 +177,7 @@ function generateRooms(random, noise2D, courtyards, complexity, heightVariation)
     
     // Check if the new room is within city boundary
     const distFromCenter = Math.sqrt(roomX * roomX + roomZ * roomZ);
-    if (distFromCenter <= CITY_RADIUS * 0.9) {
+    if (distFromCenter <= CITY_RADIUS * 10) {
       rooms.push({
         vertices: generatePolygon(roomX, roomZ, roomSize, 4, noise2D, random),
         height: roomHeight,
@@ -322,7 +322,7 @@ function generateCourtyardHouses(random, noise2D, courtyards, rooms, heightVaria
   // Process each courtyard to add houses around it
   courtyards.forEach((courtyard, courtyardIndex) => {
     const center = calculateCentroid(courtyard.vertices);
-    
+
     // Calculate base number of houses with some randomization to add variety
     const sizeRatio = Math.min(1.5, Math.max(0.5, courtyard.radius / 5));
     const houseVariation = 0.8 + random() * 0.4; // 0.8-1.2 variation factor
