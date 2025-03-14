@@ -539,14 +539,6 @@ const Scene = ({ isUnified, textures, toggleUnified }) => {
 
 // Loading indicator component for textures
 const TextureLoadingIndicator = () => {
-  const [dots, setDots] = useState('');
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDots(prev => prev.length >= 3 ? '' : prev + '.');
-    }, 500);
-    return () => clearInterval(interval);
-  }, []);
   
   return (
     <div style={{
@@ -558,9 +550,7 @@ const TextureLoadingIndicator = () => {
       fontSize: '24px',
       fontFamily: 'monospace',
       zIndex: 1000
-    }}>
-      Loading Textures{dots}
-    </div>
+    }} />
   );
 };
 
@@ -574,6 +564,7 @@ export const Shapes = () => {
 
   return (
     <div style={{ width: '100%', height: '100vh', position: 'relative' }}>  
+      {isLoading && <TextureLoadingIndicator />}
       <Canvas 
         camera={{ position: [10, 5, 10] }} 
         style={{ background: 'black' }}
@@ -598,8 +589,6 @@ export const Shapes = () => {
           enableDamping={false}
         />
       </Canvas>
-      
-      {/* SVG Cube removed - now we click directly on 3D objects */}
     </div>
   );
 };

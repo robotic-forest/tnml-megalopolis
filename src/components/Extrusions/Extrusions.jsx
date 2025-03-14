@@ -655,9 +655,9 @@ function SimplePlane({ position, index, totalImages, imagePath }) {
   const ref = useRef();
   const initialPosition = useRef(position).current;
   
-  // Set color based on index - fallback if no image path is provided
+  // Set color based on index - fallback if no image path is provided - make brighter
   const hue = (index / totalImages) * 360;
-  const color = new THREE.Color(`hsl(${hue}, 100%, 50%)`);
+  const color = new THREE.Color(`hsl(${hue}, 100%, 70%)`); // Increased lightness from 50% to 70%
   
   // Set up to face the center and handle ritual effects
   useFrame(({ clock }) => {
@@ -790,6 +790,11 @@ function SimplePlane({ position, index, totalImages, imagePath }) {
             map={new THREE.TextureLoader().load(imagePath)}
             side={THREE.DoubleSide}
             transparent={true}
+            // Add emissive properties to make texture brighter
+            emissive={"white"}
+            emissiveMap={new THREE.TextureLoader().load(imagePath)}
+            emissiveIntensity={0.6}
+            toneMapped={false} // Prevent tone mapping from reducing brightness
           />
         </mesh>
       ) : (
@@ -799,7 +804,11 @@ function SimplePlane({ position, index, totalImages, imagePath }) {
             color={color} 
             side={THREE.DoubleSide}
             transparent={true}
-            opacity={0.8}
+            opacity={0.9} // Increased opacity from 0.8 to 0.9
+            // Add emissive properties to make colors brighter
+            emissive={color.clone().multiplyScalar(0.8)}
+            emissiveIntensity={0.7}
+            toneMapped={false} // Prevent tone mapping from reducing brightness
           />
         </mesh>
       )}
