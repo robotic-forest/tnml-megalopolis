@@ -1,9 +1,9 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { Edges, OrbitControls } from '@react-three/drei'
 import { useRef, useMemo } from 'react'
 import * as THREE from 'three'
 
-function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1 }) {
+function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirection = 1 }) {
   const groupRef = useRef()
   const numPoints = 100
 
@@ -29,7 +29,7 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1 }) {
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = clock.getElapsedTime() * speed
+      groupRef.current.rotation.y = clock.getElapsedTime() * speed * rotationDirection
     }
   })
 
@@ -57,10 +57,28 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1 }) {
             roughness={0.6}
             metalness={0.3}
           />
+          <Edges
+            threshold={15}
+            color="black"
+            scale={2}
+            opacity={0.3}
+          />
+          <Edges
+            threshold={15}
+            color="black"
+            scale={1.5}
+            opacity={0.7}
+          />
+          <Edges
+            threshold={15}
+            color="black"
+            scale={1}
+            opacity={1}
+          />
         </mesh>
 
         {/* First spiral line */}
-        <line>
+        <line rotation={[Math.PI, 0, 0]} position={[0, -0.3 * scale, 0]}>
           <bufferGeometry>
             <bufferAttribute
               attach="attributes-position"
@@ -73,11 +91,22 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1 }) {
               itemSize={3}
             />
           </bufferGeometry>
-          <lineBasicMaterial color="#404040" linewidth={2} />
+          <lineBasicMaterial color="#000000" linewidth={2} transparent={true} opacity={0.6} />
         </line>
+  
+
+        {/* End sphere for first spiral */}
+        <mesh position={[
+          Math.cos(points[points.length - 1].angle) * points[points.length - 1].radius + (0.8 * scale),
+          points[points.length - 1].y - 0.3 * scale,
+          Math.sin(points[points.length - 1].angle) * points[points.length - 1].radius
+        ]}>
+          <sphereGeometry args={[0.04 * scale, 8, 8]} />
+          <meshStandardMaterial color="#000000" opacity={1} transparent={true} />
+        </mesh>
         
         {/* Second spiral line */}
-        <line>
+        <line rotation={[Math.PI, 0, 0]} position={[0, -0.3 * scale, 0]}>
           <bufferGeometry>
             <bufferAttribute
               attach="attributes-position"
@@ -90,8 +119,18 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1 }) {
               itemSize={3}
             />
           </bufferGeometry>
-          <lineBasicMaterial color="#404040" linewidth={2} />
+          <lineBasicMaterial color="#000000" linewidth={2} transparent={true} opacity={0.6} />
         </line>
+
+        {/* End sphere for second spiral */}
+        <mesh position={[
+          Math.cos(points[points.length - 1].angle + Math.PI) * points[points.length - 1].radius  - (0.8 * scale),
+          points[points.length - 1].y - 0.3 * scale,
+          Math.sin(points[points.length - 1].angle + Math.PI) * points[points.length - 1].radius
+        ]}>
+          <sphereGeometry args={[0.04 * scale, 8, 8]} />
+          <meshStandardMaterial color="#000000" opacity={1} transparent={true} />
+        </mesh>
       </group>
     </>
   )
@@ -104,21 +143,24 @@ function Scene() {
       <DNAHelix 
         scale={2.5} 
         position={[0, -3, 0]} 
-        speed={0.5}
+        speed={0.3}
+        rotationDirection={-1}
       />
       
       {/* Left smaller helix */}
       <DNAHelix 
         scale={1.8} 
-        position={[-5.4, -4, 0]} 
-        speed={0.7}
+        position={[-6, -6, 0]} 
+        speed={0.4}
+        rotationDirection={1}
       />
       
       {/* Right smallest helix */}
       <DNAHelix 
         scale={1.4} 
-        position={[3.5, -2.8, 0]} 
-        speed={0.9}
+        position={[4, -2.8, 0]} 
+        speed={0.2}
+        rotationDirection={1}
       />
     </group>
   )
@@ -130,7 +172,7 @@ export default function Graphic() {
       <Canvas 
         camera={{ 
           position: [8, 0, 8], 
-          fov: 45,
+          fov: 55,
           near: 0.1,
           far: 1000
         }}

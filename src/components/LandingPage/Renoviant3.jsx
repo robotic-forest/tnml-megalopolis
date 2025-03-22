@@ -228,13 +228,13 @@ const Renoviant3 = () => {
                 <h2 className="text-6xl font-bold mb-12 text-black max-w-3xl leading-[1.1] pointer-events-auto">
                   Crafting Tomorrow's Solutions, Today
                 </h2>
-                <p className="text-2xl text-gray-900 max-w-2xl leading-relaxed pointer-events-auto">
+                <p className="text-2xl text-gray-900 max-w-2xl leading-relaxed pointer-events-auto pr-32">
                   Our mission is to facilitate renewed growth and innovation across diverse sectors, 
                   driving positive change in the global marketplace.
                 </p>
               </div>
-              <div className="flex-1 md:absolute md:left-[40%] md:w-[80%] md:h-full md:top-0">
-                <div className="w-full h-full pointer-events-auto">
+              <div className="flex-1 md:absolute md:left-[34%] md:w-[80%] md:h-full md:top-0">
+                <div className="w-full h-full pointer-events-auto opacity-80">
                   <Graphic />
                 </div>
               </div>
