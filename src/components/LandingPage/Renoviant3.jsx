@@ -173,7 +173,7 @@ const Header = ({ backgroundColor }) => (
   <header className="fixed top-0 left-0 right-0 backdrop-blur-sm z-50" style={{ backgroundColor }}>
     <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <img src={renoviantLogo} alt="Renoviant Logo" className="w-5 h-5 grayscale" />
+        <img src={renoviantLogo} alt="Renoviant Logo" className="w-5 h-5" />
         <a href="#top" className="text-2xl font-light text-black">
           Renoviant
         </a>
