@@ -1,0 +1,15 @@
+.building-info-wrapper {
+  pointer-events: none;
+  position: fixed;
+  z-index: 100;
+}
+
+/* Add a CSS class to indicate when transform is active */
+.transform-active {
+  cursor: move !important;
+}
+
+/* Make transform handles more visible */
+.transform-controls-handle {
+  pointer-events: all !important;
+}
