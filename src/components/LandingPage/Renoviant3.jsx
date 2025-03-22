@@ -3,7 +3,7 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import renoviantLogo from './assets/RV-symbol.png';
 import Graphic from './Graphic';
 
-const ColorControl = ({ baseColor, onChange }) => {
+const ColorControl = ({ baseColor, boxColor, onChange }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -22,11 +22,23 @@ const ColorControl = ({ baseColor, onChange }) => {
               <input 
                 type="color" 
                 value={baseColor}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e) => onChange('base', e.target.value)}
                 className="w-full h-10 cursor-pointer rounded"
               />
               <div className="text-xs text-gray-500">
                 Current: {baseColor}
+              </div>
+            </div>
+            <div>
+              <label className="text-sm text-gray-700">Helix Box Color</label>
+              <input 
+                type="color" 
+                value={boxColor}
+                onChange={(e) => onChange('box', e.target.value)}
+                className="w-full h-10 cursor-pointer rounded"
+              />
+              <div className="text-xs text-gray-500">
+                Current: {boxColor}
               </div>
             </div>
           </div>
@@ -195,6 +207,7 @@ const ContactCard = ({ icon, title, content, backgroundColor }) => (
 
 const Renoviant3 = () => {
   const [baseColor, setBaseColor] = useState('#cadfe7');
+  const [boxColor, setBoxColor] = useState('#ff7a33');
   const colors = generateColorPalette(baseColor);
 
   useEffect(() => {
@@ -206,12 +219,21 @@ const Renoviant3 = () => {
     };
   }, []);
 
+  const handleColorChange = (type, color) => {
+    if (type === 'base') {
+      setBaseColor(color);
+    } else if (type === 'box') {
+      setBoxColor(color);
+    }
+  };
+
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: colors.lightest }}>
       <Header backgroundColor={colors.darkest} />
       <ColorControl 
         baseColor={baseColor} 
-        onChange={setBaseColor}
+        boxColor={boxColor}
+        onChange={handleColorChange}
       />
       
       <div className="w-full">
@@ -235,7 +257,7 @@ const Renoviant3 = () => {
               </div>
               <div className="flex-1 md:absolute md:left-[34%] md:w-[80%] md:h-full md:top-0">
                 <div className="w-full h-full pointer-events-auto opacity-80">
-                  <Graphic />
+                  <Graphic boxColor={boxColor} />
                 </div>
               </div>
             </div>

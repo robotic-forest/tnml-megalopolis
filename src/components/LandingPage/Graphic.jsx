@@ -3,7 +3,7 @@ import { Edges, OrbitControls } from '@react-three/drei'
 import { useRef, useMemo } from 'react'
 import * as THREE from 'three'
 
-function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirection = 1 }) {
+function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirection = 1, boxColor = "#cadfe7" }) {
   const groupRef = useRef()
   const numPoints = 100
 
@@ -50,25 +50,25 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirectio
       {/* Rotating helix group */}
       <group ref={groupRef} position={position}>
         {/* Top box */}
-        <mesh position={[0, 2.15 * scale, 0]}>
+        <mesh position={[0, 2.15 * scale, 0]} rotation={[0, 0, 0]}>
           <boxGeometry args={[0.2 * scale, 0.2 * scale, 0.2 * scale]} />
           <meshStandardMaterial 
-            color="#cadfe7"
+            color={boxColor}
             roughness={0.6}
             metalness={0.3}
           />
           <Edges
             threshold={15}
             color="black"
-            scale={2}
-            opacity={0.3}
+            scale={1.8}
+            opacity={0.7}
           />
-          <Edges
+          {/* <Edges
             threshold={15}
             color="black"
             scale={1.5}
-            opacity={0.7}
-          />
+            opacity={0.2}
+          /> */}
           <Edges
             threshold={15}
             color="black"
@@ -78,7 +78,7 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirectio
         </mesh>
 
         {/* First spiral line */}
-        <line rotation={[Math.PI, 0, 0]} position={[0, -0.3 * scale, 0]}>
+        <line rotation={[Math.PI, 0, 0]} position={[0, -0.5 * scale, 0]}>
           <bufferGeometry>
             <bufferAttribute
               attach="attributes-position"
@@ -98,7 +98,7 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirectio
         {/* End sphere for first spiral */}
         <mesh position={[
           Math.cos(points[points.length - 1].angle) * points[points.length - 1].radius + (0.8 * scale),
-          points[points.length - 1].y - 0.3 * scale,
+          points[points.length - 1].y - 0.5 * scale,
           Math.sin(points[points.length - 1].angle) * points[points.length - 1].radius
         ]}>
           <sphereGeometry args={[0.04 * scale, 8, 8]} />
@@ -106,7 +106,7 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirectio
         </mesh>
         
         {/* Second spiral line */}
-        <line rotation={[Math.PI, 0, 0]} position={[0, -0.3 * scale, 0]}>
+        <line rotation={[Math.PI, 0, 0]} position={[0, -0.5 * scale, 0]}>
           <bufferGeometry>
             <bufferAttribute
               attach="attributes-position"
@@ -125,7 +125,7 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirectio
         {/* End sphere for second spiral */}
         <mesh position={[
           Math.cos(points[points.length - 1].angle + Math.PI) * points[points.length - 1].radius  - (0.8 * scale),
-          points[points.length - 1].y - 0.3 * scale,
+          points[points.length - 1].y - 0.5 * scale,
           Math.sin(points[points.length - 1].angle + Math.PI) * points[points.length - 1].radius
         ]}>
           <sphereGeometry args={[0.04 * scale, 8, 8]} />
@@ -136,7 +136,7 @@ function DNAHelix({ scale = 1, position = [0, 0, 0], speed = 1, rotationDirectio
   )
 }
 
-function Scene() {
+function Scene({ boxColor }) {
   return (
     <group>
       {/* Main center helix */}
@@ -145,6 +145,7 @@ function Scene() {
         position={[0, -3, 0]} 
         speed={0.3}
         rotationDirection={-1}
+        boxColor={boxColor}
       />
       
       {/* Left smaller helix */}
@@ -153,6 +154,7 @@ function Scene() {
         position={[-6, -6, 0]} 
         speed={0.4}
         rotationDirection={1}
+        boxColor={boxColor}
       />
       
       {/* Right smallest helix */}
@@ -161,12 +163,13 @@ function Scene() {
         position={[4, -2.8, 0]} 
         speed={0.2}
         rotationDirection={1}
+        boxColor={boxColor}
       />
     </group>
   )
 }
 
-export default function Graphic() {
+export default function Graphic({ boxColor }) {
   return (
     <div className="w-full h-full min-h-[500px]">
       <Canvas 
@@ -179,7 +182,7 @@ export default function Graphic() {
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        <Scene />
+        <Scene boxColor={boxColor} />
       </Canvas>
     </div>
   )
